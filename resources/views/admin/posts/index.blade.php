@@ -31,7 +31,7 @@
 
               
                   <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-post-{{$post->id}}">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-post-{{$post->id}}">
                     Delete
                 </button>
             
@@ -42,13 +42,13 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title text-dark">Delete current</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body text-dark">
                                 Are you sure you want to delete this post?
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
 
                                 <form action="{{route('admin.posts.destroy', $post->id)}}" method="post">
