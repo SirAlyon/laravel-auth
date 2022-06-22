@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 
-use App\Post;
-use Illuminate\Http\Request;
+use App\Models\Post;
+
+use App\Http\Requests\PostRequest;
+
+use Illuminate\Support\Str;
+
 
 class PostController extends Controller
 {
@@ -16,7 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //$posts = Post::all();
+        $posts = Post::all();
         //dd($posts);
         return view('admin.posts.index', compact('posts'));
     }
@@ -28,18 +32,30 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view ('admin.posts.create');
+        
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PostRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+        $val_data = $request->validated();
+
+        //Generate the slug
+
+        $slug = Str::slug($request->title, '-');
+        //Create the resource
+        //dd($slug);
+        $val_data['slug'] = $slug;
+        //redirect to a get route
+        Post::create($val_data);
+
+        return redirect()->route('admin.posts.index')->with('message', 'Post Created Successfully');
     }
 
     /**
@@ -50,7 +66,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('admin.posts.show', compact('post'));
+
     }
 
     /**
@@ -61,7 +78,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
+        
     }
 
     /**
@@ -71,9 +89,25 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        //validate data
+        $val_data = $request->validate([
+            'title' => ['required', 'unique:posts', 'max:150'],
+            'cover_image' => ['nullable'],
+            'content' => ['nullable']
+
+        ]);
+
+        //dd($val_data);
+
+        $slug = Str::slug($request->title, '-');
+        
+        $val_data['slug'] = $slug;
+
+        $post->update($val_data);
+
+        return redirect()->route('admin.posts.index')->with('message', 'Post Updated Successfully');
     }
 
     /**
@@ -84,6 +118,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')->with('message', 'Post Deleted Successfully');
     }
 }

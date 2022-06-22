@@ -31,7 +31,7 @@
 
               
                   <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-post-{{$post->id}}">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-post-{{$post->id}}">
                     Delete
                 </button>
             
